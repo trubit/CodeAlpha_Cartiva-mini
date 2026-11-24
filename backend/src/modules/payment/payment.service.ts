@@ -217,9 +217,7 @@ export class PaymentService {
 
     // Link payment to order and ensure payment status reflects pending state
     order.paymentId = payment._id;
-    if (order.paymentStatus !== PaymentStatus.PAID) {
-      order.paymentStatus = PaymentStatus.PENDING;
-    }
+    order.paymentStatus = PaymentStatus.PENDING;
     await order.save();
 
     logger.info(

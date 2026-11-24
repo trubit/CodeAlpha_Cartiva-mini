@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import mongoose, { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
@@ -36,7 +35,6 @@ import {
   ShippingCalculationType,
   OrderStatus,
   PaymentStatus,
-  CheckoutStep,
 } from '@shared/enums.js';
 
 class MockPaystackProvider implements IPaymentProvider {
@@ -84,7 +82,11 @@ class MockPaystackProvider implements IPaymentProvider {
     };
   }
 
-  public verifyWebhookSignature(rawBody: Buffer, signature: string): boolean {
+  public async fetchTransaction(reference: string): Promise<VerifyPaymentResponse> {
+    return this.verifyPayment(reference);
+  }
+
+  public verifyWebhookSignature(_rawBody: Buffer, signature: string): boolean {
     return signature === 'valid_mock_signature';
   }
 
@@ -168,11 +170,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       isEmailVerified: true,
       isActive: true,
     });
-    customer1Token = authService.generateAccessToken({
-      userId: customer1._id.toString(),
-      email: customer1.email,
-      role: customer1.role,
-    });
+    customer1Token = authService.generateAccessToken(customer1);
 
     customer2 = await User.create({
       firstName: 'Emeka',
@@ -183,11 +181,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       isEmailVerified: true,
       isActive: true,
     });
-    customer2Token = authService.generateAccessToken({
-      userId: customer2._id.toString(),
-      email: customer2.email,
-      role: customer2.role,
-    });
+    customer2Token = authService.generateAccessToken(customer2);
 
     customer1Address = await Address.create({
       userId: customer1._id,
@@ -226,14 +220,14 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       price: 25000,
       stockQuantity: 100,
       categoryId: category._id,
-      status: ProductStatus.ACTIVE,
+      status: ProductStatus.PUBLISHED,
       isAvailable: true,
     });
 
     shippingConfig = await ShippingConfiguration.create({
       methodName: 'Standard Nationwide Delivery',
       baseRate: 500,
-      rateCalculationType: ShippingCalculationType.FLAT_RATE,
+      rateCalculationType: ShippingCalculationType.FLAT,
       carrier: 'Cartiva Logistics',
       estimatedDaysMin: 2,
       estimatedDaysMax: 4,
