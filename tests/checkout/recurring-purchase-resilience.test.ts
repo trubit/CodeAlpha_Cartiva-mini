@@ -285,7 +285,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: { customerNotes: 'First purchase' },
+      body: { acceptTerms: true, customerNotes: 'First purchase' },
     });
     expect(confirmRes.status).toBe(201);
     const orderNumber = confirmRes.body.data.orderNumber;
@@ -322,7 +322,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirm1 = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const order1Number = confirm1.body.data.orderNumber;
     const init1 = await testServer.request('/api/v1/payments/initialize', {
@@ -340,7 +340,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirm2 = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     expect(confirm2.status).toBe(201);
     const order2Number = confirm2.body.data.orderNumber;
@@ -376,7 +376,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
         method: 'POST',
         headers: { Authorization: `Bearer ${customer1Token}` },
-        body: { customerNotes: `Iteration ${i}` },
+        body: { acceptTerms: true, customerNotes: `Iteration ${i}` },
       });
       expect(confirmRes.status).toBe(201);
       orderNumbers.push(confirmRes.body.data.orderNumber);
@@ -409,12 +409,12 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmA = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const confirmB = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer2Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
 
     expect(confirmA.status).toBe(201);
@@ -480,7 +480,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -528,7 +528,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -571,7 +571,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -600,7 +600,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirm1 = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const init1 = await testServer.request('/api/v1/payments/initialize', {
       method: 'POST',
@@ -624,7 +624,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirm2 = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     expect(confirm2.status).toBe(201);
     expect(confirm2.body.data.orderNumber).not.toBe(confirm1.body.data.orderNumber);
@@ -639,12 +639,12 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       testServer.request('/api/v1/checkout/confirm', {
         method: 'POST',
         headers: { Authorization: `Bearer ${customer1Token}` },
-        body: { customerNotes: 'Idempotency test' },
+        body: { acceptTerms: true, customerNotes: 'Idempotency test' },
       }),
       testServer.request('/api/v1/checkout/confirm', {
         method: 'POST',
         headers: { Authorization: `Bearer ${customer1Token}` },
-        body: { customerNotes: 'Idempotency test' },
+        body: { acceptTerms: true, customerNotes: 'Idempotency test' },
       }),
     ]);
 
@@ -667,7 +667,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -719,7 +719,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -752,7 +752,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -799,7 +799,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const initRes = await testServer.request('/api/v1/payments/initialize', {
       method: 'POST',
@@ -831,7 +831,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
@@ -869,7 +869,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     const confirmRes = await testServer.request('/api/v1/checkout/confirm', {
       method: 'POST',
       headers: { Authorization: `Bearer ${customer1Token}` },
-      body: {},
+      body: { acceptTerms: true },
     });
     const orderNumber = confirmRes.body.data.orderNumber;
 
