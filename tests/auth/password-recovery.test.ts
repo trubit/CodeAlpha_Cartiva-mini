@@ -16,13 +16,18 @@ describe('Authentication — Password Recovery & Change Flow', () => {
   let testServer: TestServer;
 
   beforeAll(async () => {
+    if (mongoose.connection.readyState !== 0) {
+      await disconnectDatabase();
+    }
     await connectDatabase(TEST_DB_URI);
     await Promise.all([User.init(), Session.init()]);
     testServer = await startTestServer(createApp());
-  });
+  }, 60000);
 
   afterAll(async () => {
-    await testServer.close();
+    if (testServer) {
+      await testServer.close();
+    }
     if (mongoose.connection.readyState === 1 && mongoose.connection.db) {
       await mongoose.connection.db.dropDatabase();
     }

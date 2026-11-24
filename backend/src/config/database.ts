@@ -55,6 +55,14 @@ const sanitizeMongoUri = (uri: string): string => {
  * Establishes MongoDB connection using Mongoose with resilient connection pooling.
  */
 export const connectDatabase = async (uri: string = env.MONGODB_URI): Promise<typeof mongoose> => {
+  if (mongoose.connection.readyState !== 0 && mongoose.connection.readyState !== 1) {
+    try {
+      await mongoose.disconnect();
+    } catch {
+      // ignore
+    }
+  }
+
   const currentState = mongoose.connection.readyState;
   if (currentState === 1) {
     return mongoose;

@@ -28,6 +28,7 @@ pino-*.log
 
 # Testing & Coverage
 coverage/
+uploads/
 .nyc_output/
 
 # IDE & Editor artifacts

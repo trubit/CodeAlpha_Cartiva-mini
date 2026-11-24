@@ -650,13 +650,19 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       }),
     ]);
 
-    expect(res1.status).toBe(201);
-    // res2 either returns 201 with same order or handled idempotently
-    const orderNumber1 = res1.body.data.orderNumber;
-    const orderNumber2 = res2.body.data?.orderNumber;
+    // In concurrent double-submission, one request successfully creates the order (201).
+    // The sibling concurrent request either receives 201 (idempotent return) or is safely rejected (400/409/422).
+    const successRes = res1.status === 201 ? res1 : res2;
+    const secondaryRes = res1.status === 201 ? res2 : res1;
 
-    if (orderNumber2) {
-      expect(orderNumber1).toBe(orderNumber2);
+    expect(successRes.status).toBe(201);
+    expect([201, 400, 409, 422]).toContain(secondaryRes.status);
+
+    const orderNumber1 = successRes.body?.data?.orderNumber;
+    expect(orderNumber1).toBeDefined();
+
+    if (secondaryRes.status === 201 && secondaryRes.body?.data?.orderNumber) {
+      expect(secondaryRes.body.data.orderNumber).toBe(orderNumber1);
     }
 
     const count = await Order.countDocuments({ userId: customer1._id });
