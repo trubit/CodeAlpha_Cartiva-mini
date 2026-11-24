@@ -234,6 +234,16 @@ export class PaymentRepository {
   }
 
   /**
+   * Marks a recorded webhook event as processed.
+   */
+  public async markWebhookProcessed(eventId: string): Promise<void> {
+    await WebhookEvent.updateOne(
+      { eventId },
+      { $set: { processed: true, processedAt: new Date() } }
+    ).exec();
+  }
+
+  /**
    * Checks if a webhook event with the given eventId has already been recorded or processed.
    */
   public async findWebhookEventById(eventId: string): Promise<WebhookEventDocument | null> {

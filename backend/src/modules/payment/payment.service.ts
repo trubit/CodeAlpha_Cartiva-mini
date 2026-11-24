@@ -501,21 +501,30 @@ export class PaymentService {
 
     // Deduplication check
     const existingEvent = await paymentRepository.findWebhookEventById(eventId);
-    if (existingEvent && existingEvent.processed) {
+    if (existingEvent) {
       logger.info({ eventId, reference }, 'Duplicate webhook delivery acknowledged idempotently');
       return { status: 'acknowledged', processed: true, duplicate: true };
     }
 
-    // Record webhook entry
-    await paymentRepository.recordWebhookEvent({
-      eventId,
-      event,
-      gateway: 'paystack',
-      reference: reference || 'N/A',
-      payload: data || {},
-      signature,
-      processed: false,
-    });
+    try {
+      // Record webhook entry
+      await paymentRepository.recordWebhookEvent({
+        eventId,
+        event,
+        gateway: 'paystack',
+        reference: reference || 'N/A',
+        payload: data || {},
+        signature,
+        processed: false,
+      });
+    } catch (err: unknown) {
+      // Handle race-condition concurrent duplicate insert (Mongoose E11000)
+      if (err && typeof err === 'object' && 'code' in err && (err as { code: number }).code === 11000) {
+        logger.info({ eventId, reference }, 'Concurrent duplicate webhook delivery acknowledged idempotently');
+        return { status: 'acknowledged', processed: true, duplicate: true };
+      }
+      throw err;
+    }
 
     try {
       if (event === 'charge.success' && reference) {
@@ -524,16 +533,7 @@ export class PaymentService {
       }
 
       // Mark webhook as processed
-      await paymentRepository.recordWebhookEvent({
-        eventId: `${eventId}_done`,
-        event,
-        gateway: 'paystack',
-        reference: reference || 'N/A',
-        payload: { processed: true },
-        signature,
-        processed: true,
-        processedAt: new Date(),
-      });
+      await paymentRepository.markWebhookProcessed(eventId);
 
       return { status: 'processed', processed: true };
     } catch (err: unknown) {
