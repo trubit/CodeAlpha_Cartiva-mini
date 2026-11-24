@@ -1,0 +1,24 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: cartiva-backend-pdb
+  namespace: cartiva-mini
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cartiva-mini
+      app.kubernetes.io/component: backend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: cartiva-frontend-pdb
+  namespace: cartiva-mini
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cartiva-mini
+      app.kubernetes.io/component: frontend
+

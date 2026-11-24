@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#101D3B" />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Cartiva Mini — Everything You Need, Just a Click Away</title>
+    <meta
+      name="description"
+      content="Shop authentic electronics, fashion, lifestyle essentials, and home appliances with fast delivery across Nigeria and secure Paystack checkout."
+    />
+    <meta name="keywords" content="Cartiva Mini, Nigerian online shopping, electronics Lagos, buy clothes Abuja, Paystack ecommerce, fast delivery Nigeria" />
+    <meta name="author" content="Cartiva Mini" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cartivamini.ng/" />
+    <meta property="og:title" content="Cartiva Mini — Everything You Need, Just a Click Away" />
+    <meta
+      property="og:description"
+      content="Discover amazing products, unbeatable prices, and express nationwide delivery on Cartiva Mini."
+    />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cartiva Mini — Everything You Need, Just a Click Away" />
+    <meta
+      name="twitter:description"
+      content="Discover amazing products, unbeatable prices, and express nationwide delivery on Cartiva Mini."
+    />
+    
+    <!-- PWA Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Official Paystack Inline Gateway -->
+    <script src="https://js.paystack.co/v1/inline.js" async></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Service worker registration for PWA installability & offline fallback
+      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

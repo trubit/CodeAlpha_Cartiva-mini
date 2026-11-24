@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cartiva-network-policy
+  namespace: cartiva-mini
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: cartiva-mini
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow incoming traffic from Ingress controller and intra-namespace
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 5000
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 27017
+  egress:
+    # Allow outbound DNS, database, and Paystack API calls
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 27017
+

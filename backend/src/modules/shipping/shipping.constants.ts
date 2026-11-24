@@ -1,0 +1,53 @@
+/**
+ * Cartiva Mini — Shipping Domain Constants
+ */
+
+export const SHIPPING_CONSTANTS = {
+  DEFAULT_COUNTRY: 'Nigeria' as string,
+  DEFAULT_CURRENCY: 'NGN' as string,
+  DEFAULT_ITEM_WEIGHT_KG: 0.5,
+  MIN_ESTIMATED_DAYS: 1,
+  MAX_ESTIMATED_DAYS: 30,
+  ALL_LOCATIONS_WILDCARD: '*',
+  ALL_LOCATIONS_ALIAS: 'all',
+};
+
+export const NIGERIAN_STATES = [
+  'Abia',
+  'Adamawa',
+  'Akwa Ibom',
+  'Anambra',
+  'Bauchi',
+  'Bayelsa',
+  'Benue',
+  'Borno',
+  'Cross River',
+  'Delta',
+  'Ebonyi',
+  'Edo',
+  'Ekiti',
+  'Enugu',
+  'FCT - Abuja',
+  'Gombe',
+  'Imo',
+  'Jigawa',
+  'Kaduna',
+  'Kano',
+  'Katsina',
+  'Kebbi',
+  'Kogi',
+  'Kwara',
+  'Lagos',
+  'Nasarawa',
+  'Niger',
+  'Ogun',
+  'Ondo',
+  'Osun',
+  'Oyo',
+  'Plateau',
+  'Rivers',
+  'Sokoto',
+  'Taraba',
+  'Yobe',
+  'Zamfara',
+] as const;

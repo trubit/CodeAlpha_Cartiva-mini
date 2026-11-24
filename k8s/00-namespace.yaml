@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cartiva-mini
+  labels:
+    app.kubernetes.io/name: cartiva-mini
+    app.kubernetes.io/part-of: ecommerce-platform
+    environment: production
+

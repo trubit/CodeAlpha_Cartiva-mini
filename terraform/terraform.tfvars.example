@@ -1,0 +1,12 @@
+# Example Terraform Variables configuration for Cartiva Mini Production
+project_name        = "cartiva-mini"
+environment         = "production"
+aws_region          = "eu-west-1"
+vpc_cidr            = "10.0.0.0/16"
+cluster_name        = "cartiva-mini-prod"
+kubernetes_version  = "1.29"
+node_instance_types = ["t3.medium", "t3a.medium"]
+min_nodes           = 2
+max_nodes           = 6
+desired_nodes       = 3
+

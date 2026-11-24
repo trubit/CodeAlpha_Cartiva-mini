@@ -1,0 +1,61 @@
+name: Cartiva Mini CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  validate:
+    name: Build, Lint & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      MONGODB_TEST_URI: mongodb://localhost:27017/cartiva-mini-ci
+      JWT_SECRET: super_secure_ci_test_jwt_secret_key_minimum_32_characters_long
+      JWT_REFRESH_SECRET: super_secure_ci_test_refresh_jwt_secret_key_minimum_32_chars
+      PAYSTACK_SECRET_KEY: sk_test_placeholder_for_development
+      PAYSTACK_PUBLIC_KEY: pk_test_placeholder_for_development
+      FRONTEND_URL: http://localhost:5180
+      PORT: 5000
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Type Checking
+        run: npm run typecheck
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Production Build
+        run: npm run build
+
+      - name: Run Automated Test Suites
+        run: npm test

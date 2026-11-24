@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@/*": ["./frontend/src/*"],
+      "@shared/*": ["./shared/types/*"],
+      "@backend/*": ["./backend/src/*"]
+    }
+  },
+  "include": ["frontend/src/**/*", "backend/src/**/*", "shared/types/**/*", "tests/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
