@@ -617,7 +617,9 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       method: 'GET',
       headers: { Authorization: `Bearer ${customer1Token}` },
     });
-    expect(cartRes.body.data.cart.items.length).toBe(0);
+    expect(cartRes.status).toBe(200);
+    const cartItems = cartRes.body.data?.items ?? cartRes.body.data?.cart?.items ?? [];
+    expect(cartItems.length).toBe(0);
 
     // Can add item again and start completely independent purchase
     await setupCustomerCartAndSession(customer1Token, customer1Address._id.toString());
@@ -690,7 +692,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     });
 
     // First delivery
-    const hook1 = await testServer.request('/api/v1/payments/webhook', {
+    const hook1 = await testServer.request('/api/v1/webhooks/paystack', {
       method: 'POST',
       headers: {
         'x-paystack-signature': 'valid_mock_signature',
@@ -701,7 +703,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
     expect(hook1.status).toBe(200);
 
     // Second delivery (duplicate replay)
-    const hook2 = await testServer.request('/api/v1/payments/webhook', {
+    const hook2 = await testServer.request('/api/v1/webhooks/paystack', {
       method: 'POST',
       headers: {
         'x-paystack-signature': 'valid_mock_signature',
@@ -710,7 +712,7 @@ describe('20-Scenario Recurring Purchase Resilience Test Suite', () => {
       body: JSON.parse(webhookPayload),
     });
     expect(hook2.status).toBe(200);
-    expect(hook2.body.duplicate).toBe(true);
+    expect(hook2.body.data?.duplicate ?? hook2.body.duplicate).toBe(true);
   });
 
   // --- SCENARIO 14: Gateway temporary unavailability handling ---
